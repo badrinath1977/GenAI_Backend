@@ -1,15 +1,14 @@
-
 from fastapi import APIRouter
 from pydantic import BaseModel
 from app.services.rag_orchestrator import RAGOrchestrator
 
-router = APIRouter()
+router = APIRouter(prefix="/chat", tags=["Chat"])
 rag = RAGOrchestrator()
 
 class ChatRequest(BaseModel):
     question: str
 
-@router.post("/chat")
-def chat(request: ChatRequest):
-    response = rag.ask(request.question)
-    return {"response": response}
+@router.post("/ask")
+def ask(req: ChatRequest):
+    response = rag.ask(req.question)
+    return {"response": str(response)}
