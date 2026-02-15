@@ -24,6 +24,7 @@ var/
 # ==============================
 # Virtual Environment
 # ==============================
+genai_svc_env/
 venv/
 env/
 ENV/

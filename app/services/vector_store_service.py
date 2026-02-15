@@ -1,18 +1,35 @@
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings, HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from app.core.settings import settings
 import os
+
 
 class VectorStoreService:
 
     def __init__(self):
-        if settings.LLM_PROVIDER.lower() == "openai":
-            self.embeddings = OpenAIEmbeddings(openai_api_key=settings.OPENAI_API_KEY)
+
+        provider = settings.EMBEDDING_PROVIDER.lower()
+
+        if provider == "openai":
+            self.embeddings = OpenAIEmbeddings(
+                api_key=settings.OPENAI_API_KEY
+            )
+
+        elif provider == "local":
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name="all-MiniLM-L6-v2"
+            )
+
         else:
-            self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            raise ValueError(f"Unsupported EMBEDDING_PROVIDER: {provider}")
 
         if os.path.exists(settings.VECTOR_DB_PATH):
-            self.db = FAISS.load_local(settings.VECTOR_DB_PATH, self.embeddings)
+            self.db = FAISS.load_local(
+                settings.VECTOR_DB_PATH,
+                self.embeddings,
+                allow_dangerous_deserialization=True
+            )
         else:
             self.db = None
 

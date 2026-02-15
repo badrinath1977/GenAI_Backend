@@ -33,3 +33,8 @@ http://localhost:8000/docs
 CHROMA_DB_PATH=./data/chroma
 EMBEDDING_MODEL=all-MiniLM-L6-v2
 LLM_MODEL=llama3.2:1b
+
+
+# delete env 
+-- Remove-Item -Recurse -Force .\genai_svc_env
+
