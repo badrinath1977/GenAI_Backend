@@ -37,4 +37,10 @@ LLM_MODEL=llama3.2:1b
 
 # delete env 
 -- Remove-Item -Recurse -Force .\genai_svc_env
+-- python -m venv genai_svc_env --clear
+
+# uninstall 
+-- pip freeze > uninstall.txt
+-- pip uninstall -r uninstall.txt -y
+
 
